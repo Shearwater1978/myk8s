@@ -50,7 +50,7 @@ git clone git@github.com:Uglykoyote/myk8s.git
 ```
 3. Change directory to kubernetes
 ```bash
-cd kubernetes
+cd myk8s
 ```
 4. Make all needed change in file group_vars/all and k8s.inventory
 5. Run pre-install check with ansible ad-hoc command:

@@ -94,7 +94,6 @@ k8smaster  ansible_host=172.0.200.10
 
 [nodes]
 k8sworker1 ansible_host=172.0.200.15
-k8sworker2 ansible_host=172.0.200.16
 
 [cluster:children]
 master

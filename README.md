@@ -7,12 +7,12 @@
 ## Preparing virtual environment on Windows (tested on Windows 10)
 ### Step-by-step instruction
 <i>Note</i>. Some commands can looks and use different and depending on the version of software used<br>
-<i>Note</i>. You can change file [provision.sh](https://github.com/Uglykoyote/kubernetes/blob/master/localenv/provision.sh) 
-<i>Note</i>. You can change file [Vagrantfile](https://github.com/Uglykoyote/kubernetes/blob/master/localenv/Vagrantfile) 
+<i>Note</i>. You can change file [provision.sh](https://github.com/Uglykoyote/myk8s/blob/master/localenv/provision.sh) 
+<i>Note</i>. You can change file [Vagrantfile](https://github.com/Uglykoyote/myk8s/blob/master/localenv/Vagrantfile) 
 
 1. Make local directory on Windows disk
-1. Download [Vagrantfile](https://github.com/Uglykoyote/kubernetes/blob/master/localenv/Vagrantfile) and put into dir
-1. Download [provision.sh](https://github.com/Uglykoyote/kubernetes/blob/master/localenv/provision.sh) and put into dir
+1. Download [Vagrantfile](https://github.com/Uglykoyote/myk8s/blob/master/localenv/Vagrantfile) and put into dir
+1. Download [provision.sh](https://github.com/Uglykoyote/myk8s/blob/master/localenv/provision.sh) and put into dir
 1. Open cmd
 1. Switch into directory with Vagrantfile and provision.sh files
 1. Run command for create virtual servers
@@ -44,9 +44,9 @@ managegroup | k8smanagers | A dedicated group for user for managing of kubernete
 
 ## Installation Kubernetes
 1. Get connect into Ansible-server
-2. Clone [project](https://github.com/Uglykoyote/kubernetes)
+2. Clone [project](https://github.com/Uglykoyote/myk8s)
 ```bash
-git clone git@github.com:Uglykoyote/kubernetes.git
+git clone git@github.com:Uglykoyote/myk8s.git
 ```
 3. Change directory to kubernetes
 ```bash
@@ -105,4 +105,4 @@ nodes
 You can read info about project with k8s full-test [sonobuoy](https://github.com/vmware-tanzu/sonobuoy)
 
 ## Source code
-The source code is currently available on Github: https://github.com/Uglykoyote/kubernetes
+The source code is currently available on Github: https://github.com/Uglykoyote/myk8s

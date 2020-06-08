@@ -1,0 +1,19 @@
+---
+- name: Get k8s token
+  command: kubeadm token generate
+  register: k8s_token
+  delegate_to: "{{ groups['master'][0] }}"
+  become_user: "{{ manageuser | default('k8smanager') }}"
+  tags: skip_ansible_lint
+
+- name: Get connect string
+  shell: |
+    kubeadm token create "{{ k8s_token.stdout }}" --print-join-command --ttl=0
+  register: k8s_join_string
+  delegate_to: "{{ groups['master'][0] }}"
+  become_user: "{{ manageuser | default('k8smanager') }}"
+  tags: skip_ansible_lint
+
+- name: Add nodes
+  command: "{{ k8s_join_string.stdout }}"
+  tags: skip_ansible_lint

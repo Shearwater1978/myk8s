@@ -1,0 +1,20 @@
+---
+- name: Gel list process for user "{{ manageuser | default('k8smanager') }}"
+  shell: |
+    ps -fe | grep "{{ manageuser | default('k8smanager') }}" | grep -v 'color'| grep su | awk '{print $3}'
+  register: proclist
+
+- name: Stop all "{{ manageuser | default('k8smanager') }}" process
+  shell: |
+    kill -9 "{{ item }}"
+  with_items: "{{ proclist.stdout_lines }}"
+
+- name: Remove user "{{ manageuser | default('k8smanager') }}"
+  user:
+    name: "{{ manageuser | default('k8smanager') }}"
+    state: absent
+
+- name: Remove "{{ managegroup | default('k8smanagers') }}" group
+  group:
+    name: "{{ managegroup | default('k8smanagers') }}"
+    state: absent

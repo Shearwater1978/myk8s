@@ -1,0 +1,8 @@
+- hosts: all
+  become: yes
+  roles:
+    - { role: reset_srv_k8s, tags: ['drain','resetk8s'] }
+    - { role: remove_srv_k8s_dirs, tags: ['drain','removek8sdirs'] }
+    - { role: check_open_port_k8s_cluster, tags: ['drain','checkport'] }
+    - { role: remove_srv_k8s_user_group, tags: ['drain','removeusergroup'] }
+    - { role: remove_k8s_kubelet_service, tags: ['drain','removekubeletservice'] }

@@ -1,0 +1,6 @@
+---
+- name: Disable swap on flight
+  shell: |
+    swapoff -a
+    sed -i '/ swap / s/^/#/' /etc/fstab
+  tags: skip_ansible_lint

@@ -1,0 +1,57 @@
+Vagrant.configure("2") do |config|
+
+	# aws t2.small
+	$t2_small_mem = 2048
+	$t2_small_cpu = 2
+	
+	$k8s_master_ip = 10
+	$k8s_worker_begin_ip = 15
+	$private_net = "172.0.1."
+	$vbox_img = "generic/centos7"
+	$count_of_worker_nodes = 1
+	$ssh_worker_port = 10322
+
+	#Run Kubernetes master server
+   	config.vm.define "k8smaster" do |master|
+		master.vm.box = "#{$vbox_img}"
+		master.vm.hostname = "k8smaster.my.home"
+		master.vm.network :private_network, ip: "#{$private_net}#{$k8s_master_ip}"
+		master.vm.network "forwarded_port", guest: 22, host: 10222
+		if Vagrant.has_plugin?("vagrant-vbguest")
+			master.vbguest.auto_update = false
+			master.vbguest.no_remote = true
+		end
+		master.vm.provider :virtualbox do |vb|
+	    		vb.customize [
+	    			"modifyvm", :id,
+	    			"--memory", "#{$t2_small_mem}",
+	    			"--cpus", "#{$t2_small_cpu}",
+	    			"--audio", "none",
+	    		]
+	    	end
+		master.vm.provision "shell", path: "provision.sh"
+	end
+	
+
+	# Run Kubernetes worker nodes
+	(1..$count_of_worker_nodes).each do |i|
+		config.vm.define "k8sworker#{i}" do |node|
+			node.vm.box = "#{$vbox_img}"
+			node.vm.hostname = "k8sworker#{i}.my.home"
+			node.vm.network :private_network, ip: "#{$private_net}#{$k8s_worker_begin_ip+i-1}"
+			node.vm.network "forwarded_port", guest: 22, host: "#{$ssh_worker_port+i}"
+			if Vagrant.has_plugin?("vagrant-vbguest")
+				node.vbguest.auto_update = false
+			end
+			node.vm.provider :virtualbox do |vb|
+				vb.customize [
+					"modifyvm", :id,
+					"--memory", "#{$t2_small_mem}",
+					"--cpus", "#{$t2_small_cpu}",
+					"--audio", "none",
+				]
+			end
+			node.vm.provision "shell", path: "provision.sh"
+		end
+	end
+end

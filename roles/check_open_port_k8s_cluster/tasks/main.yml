@@ -1,0 +1,21 @@
+---
+- name: Check ports
+  shell: /usr/sbin/ss -tln |  grep ":{{ item }} " | sed -e 's/.*\///'
+  register:
+    netstat_result
+  with_items:
+    - 6443/tcp
+    - 2379-2380/tcp
+    - 10250/tcp
+    - 10251/tcp
+    - 10252/tcp
+    - 10255/tcp
+    - 8472/udp
+    - 30000-32767/tcp
+  changed_when: false
+
+- name: print result
+  debug:
+    msg: "for port: {{ item.item }}, netstat stdout was: {{ item.stdout }}"
+  with_items:
+    - "{{ netstat_result.results }}"

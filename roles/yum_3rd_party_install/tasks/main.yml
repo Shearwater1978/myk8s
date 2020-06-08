@@ -1,0 +1,6 @@
+---
+- name: Install 3rd party
+  yum:
+    name: ['wget', 'mc', 'vim', 'git', 'net-tools', 'tcpdump', 'nc', 'yum-utils', 'device-mapper-persistent-data', 'lvm2']
+    state: present
+    disable_gpg_check: yes

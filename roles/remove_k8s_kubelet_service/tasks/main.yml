@@ -1,0 +1,25 @@
+---
+- name: Disable & remove k8s services
+  service:
+    name: kubelet
+    state: stopped
+    enabled: no
+  ignore_errors: true
+
+- name: Force systemd to reread configs
+  systemd:
+    daemon_reload: yes
+
+- name: Erase k8s packages
+  yum:
+    name: "{{ itme }}"
+    state: absent
+  ignore_errors: true
+
+- name: Remove unused dir
+  file:
+    state: absent
+    dest: "{{ item }}"
+  with_items:
+    - '/etc/kubernetes/'
+    - '/usr/lib/systemd/system/kubelet.service.d/'

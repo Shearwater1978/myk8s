@@ -1,0 +1,12 @@
+---
+- name: Copy kubernetes repo file on to each node
+  copy:
+    src: kubernetes.repo
+    dest: /etc/yum.repos.d/kubernetes.repo
+    owner: root
+
+- name: Install Kubernetes worker node
+  yum:
+    name: ['kubectl', 'kubeadm']
+    state: present
+    disable_gpg_check: yes

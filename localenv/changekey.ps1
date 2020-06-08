@@ -1,0 +1,3 @@
+$mykey='my_key="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDBT8ioWVWIAnRhlxmYKtRNJz6HQiZQ1y4ZkGu/k0Aw5y725EfkpRYfMZoayvVqzSK0V3+PmdRGDBne2FO+ZFTk0SjMqQHDzm3B0xwOVBB4sx6e4WeL+07PJw6eOa+CZLSvNt3YH+avQm9pLA1MN3dViwF+bN2QvN/UCSuwVbTvA84SQUzeC+vva1sUQ+AURjaZoYhLFK/8BafhCWS4ZSTH1uXoloQRK//MraLP4M0fr5LaV22FYtsEnr5XZkP1LnxSKu1WgsDGTT7uCEaagx6SsFeAYj+6D9azotaazLP7aVNodQ9cIM3cUUSTjzKDI9EocdqY5/cBRFh+aMjN1Qlb root@myansible.my.ru"'
+
+(Get-Content -Path D:\vmforjenkins\git\kubernetes\localenv\provision.sh -Raw) -replace "my_key='changeme'",$mykey | Set-Content -Path D:\vmforjenkins\git\kubernetes\localenv\provision.sh

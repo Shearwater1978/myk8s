@@ -1,0 +1,13 @@
+---
+- name: Change status selinux to disable on flight
+  selinux:
+    state: disabled
+
+- name: Disable status SELinux permanently
+  lineinfile:
+    path: /etc/sysconfig/selinux
+    line: SELINUX=disabled
+    regexp: "{{ item }}"
+  with_items:
+    - =enforcing
+    - =permissive

@@ -86,7 +86,7 @@ ansible-playbook k8s_install.yml -i k8s.inventory -e 'manageuser=mysuperuser'
 ```
 
 #### Example of k8s.inventory
-*Note. We use 172.0.200.0/24 network, 1 master and 2 worker nodes*
+*Note. We use 172.0.200.0/24 network, 1 master and 1 worker node*
 ```bash
 cat k8s.inventory
 [master]

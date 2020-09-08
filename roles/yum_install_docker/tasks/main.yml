@@ -10,3 +10,4 @@
     name: ['docker-ce', 'docker-ce-cli']
     state: present
     disable_gpg_check: yes
+    disablerepo: "epel"

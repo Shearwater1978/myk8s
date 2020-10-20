@@ -11,3 +11,11 @@
     state: present
     disable_gpg_check: yes
     disablerepo: "epel"
+
+- name: Add node-ip for bootstrap kubelet
+  lineinfile:
+    state   : present
+    dest    : /etc/sysconfig/kubelet
+    line    : 'KUBELET_EXTRA_ARGS=--node-ip={{ advertiseip | default(hostvars[inventory_hostname].ansible_host) }}'
+    regexp  : ''
+    insertafter: EOF

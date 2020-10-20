@@ -24,9 +24,9 @@
 - hosts: nodes
   become: yes
   roles:
-    - { role: upload_k8s_conf_to_node, tags: ['nodes'] }
-    - { role: node_start_and_change_firewalld, tags: ['nodes'] }
-    - { role: yum_install_k8s_node, tags: ['nodes'] }
-    - { role: enable_k8snode_service, tags: ['nodes'] }
-    - { role: add_node_to_k8s_cluster, tags: ['nodes'] }
+    - { role: upload_k8s_conf_to_node, tags: ['nodeconfupload','nodes'] }
+    - { role: node_start_and_change_firewalld, tags: ['firewalldNode','nodes'] }
+    - { role: yum_install_k8s_node, tags: ['yumnode','nodes'] }
+    - { role: enable_k8snode_service, tags: ['nodeservice','nodes'] }
+    - { role: add_node_to_k8s_cluster, tags: ['addnodetocluster','nodes'] }
 

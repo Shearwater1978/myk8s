@@ -1,0 +1,10 @@
+[master]
+k8smaster  ansible_host=172.0.1.100
+
+[nodes]
+k8sworker1 ansible_host=172.0.1.105
+#k8sworker2 ansible_host=172.0.1.16
+
+[cluster:children]
+master
+nodes

@@ -1,0 +1,17 @@
+---
+- name: Start Docker
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Upload daemon.json for Docker
+  copy:
+    src: daemon.json
+    dest: /etc/docker/daemon.json
+
+- name: reStart Docker
+  service:
+    name: docker
+    state: restarted
+    enabled: yes

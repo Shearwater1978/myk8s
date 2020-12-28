@@ -1,0 +1,28 @@
+---
+- name: Create "{{ managegroup | default('k8smanagers') }}" group
+  group:
+    name: "{{ managegroup | default('k8smanagers') }}"
+    state: present
+
+- name: Create user "{{ manageuser | default('k8smanager') }}"
+  user:
+    name: "{{ manageuser | default('k8smanager') }}"
+    comment: Additional user for manage k8s cluster
+    home: "/home/{{ manageuser | default('k8smanager') }}"
+    create_home: true
+    shell: /bin/bash
+    group: "{{ managegroup | default('k8smanagers') }}"
+
+- name: Add user to docker group
+  user:
+    name: "{{ manageuser | default('k8smanager') }}"
+    groups: docker
+
+- name: Add to bashrc autocompletion for kubernetes cli command
+  lineinfile:
+    path: "/home/{{ manageuser | default('k8smanager') }}/.bashrc"
+    line: "source <(kubectl completion bash)"
+
+- name: Print new main user for k8s
+  debug:
+    msg: "+++ New user for manage cluster {{ manageuser | default('k8smanager') }} +++"

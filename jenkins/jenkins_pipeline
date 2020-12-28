@@ -1,0 +1,106 @@
+pipeline {
+	agent {label 'myWin10'}
+
+	stages {
+		stage('Make dir') {
+			steps {
+				script {
+                    try {
+                        bat """
+							mkdir D:\\vmforjenkins\\git
+						"""
+                    } catch(err) {
+                        echo err.getMessage()
+                        echo "Dir exists"
+                    }
+                }
+			}
+		}
+		
+		stage('Git clone') {
+			steps {
+				bat """
+					pushd D:\\vmforjenkins\\git
+					rmdir /S /Q kubernetes
+					git clone https://github.com/Uglykoyote/kubernetes.git
+					cd kubernetes
+					cd localenv
+					powershell Set-ExecutionPolicy Bypass
+					powershell -windowstyle hidden .\\changevagrant.ps1 172.0.1.
+					powershell -windowstyle hidden .\\changekey.ps1
+					copy D:\\vmforjenkins\\git\\kubernetes\\localenv\\Vagrantfile D:\\vmforjenkins\\vm\\kubernetes\\Vagrantfile
+					copy D:\\vmforjenkins\\git\\kubernetes\\localenv\\provision.sh D:\\vmforjenkins\\vm\\kubernetes\\provision.sh
+				"""
+			}
+		}
+		
+		stage('copy Vagrantfile') {
+			steps {
+				bat """
+					pushd D:\\vmforjenkins\\vm\\kubernetes\\
+					dir
+				"""
+			}
+		}
+		
+		stage('Vagrant destroy') {
+			steps {
+				script {
+                    try {
+						bat """
+							pushd D:\\vmforjenkins\\vm\\kubernetes\\
+							vagrant destroy --force
+							sleep 60
+						"""
+					} catch(err) {
+                        echo err.getMessage()
+					}
+				}
+			}
+		}
+		
+		stage('Vagrant up') {
+			steps {
+				bat """
+					pushd D:\\vmforjenkins\\vm\\kubernetes\\
+					vagrant up k8smaster k8sworker1
+				"""
+			}
+		}
+		
+		stage('Prepare ansible') {
+			agent {label 'master'}
+			
+            steps {
+                sh """
+                    ssh -tt vagrant@172.0.0.222 << EOF
+					sudo su -
+					cd /root/git/remotejenkins
+					git clone https://github.com/Uglykoyote/kubernetes.git
+					cd kubernetes
+					sed -i 's/172.0.0/172.0.1/g' ./k8s.inventory
+					sed -i 's/172.0.0/172.0.1/g' ./group_vars/all
+                    exit
+                    exit
+                    EOF
+                """
+			}
+		}
+		
+		stage('Install kubernetes') {
+			agent {label 'master'}
+			
+            steps {
+                sh """
+                    ssh -tt vagrant@172.0.0.222 << EOF
+					sudo su -
+					cd /root/git/remotejenkins/kubernetes
+					ansible-playbook -i k8s.inventory k8s_install.yml | tee ./ansible_install.out
+                    exit
+                    exit
+                    EOF
+                """
+			}
+		}
+    }
+}

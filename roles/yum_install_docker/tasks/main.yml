@@ -1,0 +1,13 @@
+---
+- name: Copy docker-ce repo file on to each node
+  copy:
+    src: docker-ce.repo
+    dest: /etc/yum.repos.d/docker-ce.repo
+    owner: root
+
+- name: Install Docker-ce
+  yum:
+    name: ['docker-ce', 'docker-ce-cli']
+    state: present
+    disable_gpg_check: yes
+    disablerepo: "epel"

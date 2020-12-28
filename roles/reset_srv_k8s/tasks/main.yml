@@ -1,0 +1,6 @@
+---
+- name: Soft remove k8s cluster from server
+  shell: |
+    kubeadm reset -f
+  ignore_errors: true
+  register: resetout

@@ -1,0 +1,20 @@
+---
+- name: Create .kube dirs
+  file:
+    path: "/home/{{ item.name }}/{{ item.dir }}"
+    owner: "{{ item.name }}"
+    mode: '0700'
+    recurse: yes
+    state: directory
+  with_items:
+    - { dir: ".kube", name: "{{ manageuser | default('k8smanager') }}" }
+
+- name: Copy all files into new dir
+  copy:
+    src: "/etc/kubernetes/admin.conf"
+    dest: "/home/{{ item }}/.kube/config"
+    owner: "{{ item }}"
+    group: "{{ managegroup | default('k8smanagers') }}"
+    remote_src: yes
+  with_items:
+    - "{{ manageuser | default('k8smanager') }}"

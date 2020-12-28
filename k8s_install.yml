@@ -1,0 +1,32 @@
+- hosts: all
+  become: yes
+  gather_facts: yes
+  roles:
+    - { role: copy_ssh_key, tags: ['ssh','prepare'] }
+    - { role: disable_se_linux, tags: ['selinux','prepare'] }
+    - { role: disable_swap, tags: ['swap','prepare'] }
+    - { role: yum_3rd_party_install, tags: ['3rd','prepare'] }
+    - { role: yum_install_docker, tags: ['dockerinstall','prepare'] }
+    - { role: enable_docker_service, tags: ['dockerrun','prepare'] }
+
+- hosts: master
+  become: yes
+  roles:
+    - { role: master_start_and_change_firewalld, tags: ['firewalldMaster','master'] }
+    - { role: yum_install_k8s_master, tags: ['yummaster','master'] }
+    - { role: enable_k8smaster_service, tags: ['masterservice','master'] }
+    - { role: init_k8smaster_cluster, tags: ['init','master'] }
+    - { role: create_user_for_k8s_manage, tags: ['master','userk8smanage'] }
+    - { role: grant_ability_to_k8smanagers, tags: ['provideability','master'] }
+    - { role: create_overlay_net, tags: ['masteroverlay','master'] }
+    - { role: restart_kubelet_service, tags: ['masterkubelet','master'] }
+
+- hosts: nodes
+  become: yes
+  roles:
+    - { role: upload_k8s_conf_to_node, tags: ['nodeconfupload','nodes'] }
+    - { role: node_start_and_change_firewalld, tags: ['firewalldNode','nodes'] }
+    - { role: yum_install_k8s_node, tags: ['yumnode','nodes'] }
+    - { role: enable_k8snode_service, tags: ['nodeservice','nodes'] }
+    - { role: add_node_to_k8s_cluster, tags: ['addnodetocluster','nodes'] }
+

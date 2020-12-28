@@ -1,0 +1,21 @@
+---
+- name: Copy kubernetes repo file on to each node
+  copy:
+    src: kubernetes.repo
+    dest: /etc/yum.repos.d/kubernetes.repo
+    owner: root
+
+- name: Install Kubernetes master node
+  yum:
+    name: ['kubelet', 'kubectl', 'kubeadm']
+    state: present
+    disable_gpg_check: yes
+    disablerepo: "epel"
+
+- name: Add node-ip for bootstrap kubelet
+  lineinfile:
+    state   : present
+    dest    : /etc/sysconfig/kubelet
+    line    : 'KUBELET_EXTRA_ARGS=--node-ip={{ advertiseip | default(hostvars[inventory_hostname].ansible_host) }}'
+    regexp  : ''
+    insertafter: EOF 

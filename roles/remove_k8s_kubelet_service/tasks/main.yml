@@ -10,12 +10,6 @@
   systemd:
     daemon_reload: yes
 
-- name: Erase k8s packages
-  yum:
-    name: "{{ itme }}"
-    state: absent
-  ignore_errors: true
-
 - name: Remove unused dir
   file:
     state: absent
@@ -23,3 +17,7 @@
   with_items:
     - '/etc/kubernetes/'
     - '/usr/lib/systemd/system/kubelet.service.d/'
+    - '/usr/lib/systemd/system/kubelet.service'
+    - '/etc/systemd/system/kubelet.service.d'
+    - '/etc/sysconfig/kubelet'
+    - '/etc/sysctl.d/99-kubernetes-cri.conf'

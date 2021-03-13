@@ -14,6 +14,9 @@
   become_user: "{{ manageuser | default('k8smanager') }}"
   tags: skip_ansible_lint
 
+- debug:
+    msg: "Conn string: {{ k8s_join_string.stdout }}"
+
 - name: Add nodes
   command: "{{ k8s_join_string.stdout }}"
   tags: skip_ansible_lint

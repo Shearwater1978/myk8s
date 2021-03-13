@@ -14,6 +14,7 @@
 
 - name: Init kubernetes cluster
   shell: |
-    kubeadm init --apiserver-advertise-address={{ advertiseip | default(hostvars[inventory_hostname].ansible_host) }} --pod-network-cidr={{ podnetworkcidr | default('10.244.0.0') }}/16
+    kubeadm init --apiserver-advertise-address={{ advertiseip | default(hostvars[inventory_hostname].ansible_host) }} --pod-network-cidr={{ podnetworkcidr | default('10.244.0.0') }}/16 > /var/log/kubeadm.log
   when: inventory_hostname == groups['master'][0]
   tags: skip_ansible_lint
+  delegate_to: "{{ groups['master'][0] }}"

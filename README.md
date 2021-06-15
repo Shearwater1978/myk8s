@@ -39,7 +39,7 @@ vagrant up
 Name | Default value | Description
 ---| :---: | ---
 podnetworkcidr | 10.244.0.0 | Pod network on the cluster so that your Pods can talk to each other
-manageuser | k8smanager | User for managing of kubernetes cluser
+manageuser | k8smanager | User for managing of kubernetes cluster
 managegroup | k8smanagers | A dedicated group for user for managing of kubernetes cluster
 
 ## Installation Kubernetes

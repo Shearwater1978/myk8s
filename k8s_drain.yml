@@ -6,3 +6,4 @@
     - { role: check_open_port_k8s_cluster, tags: ['drain','checkport'] }
     - { role: remove_srv_k8s_user_group, tags: ['drain','removeusergroup'] }
     - { role: remove_k8s_kubelet_service, tags: ['drain','removekubeletservice'] }
+    - { role: reset_k8s_yum, tags: ['drain','removek8spackages'] }
